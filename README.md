@@ -12,7 +12,7 @@ npm run setup
 
 ### Base de données
 
-Afin de gérer l'inscription et la connexion d'utilisateurs, crée une nouvelle base de données nommée `jwtcourse` et crée la table `user` en respectant cette modélisation :
+Afin de gérer l'inscription et la connexion d'utilisateurs, crée une nouvelle base de données nommée `jwtcourse` et importe le script `backend/database.sql` afin de recréer la table `user` suivante :
 
 ![Database](pictures/2-database.png)
 
