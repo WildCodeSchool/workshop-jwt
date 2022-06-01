@@ -1,14 +1,14 @@
 _Fork_ ce _boilerplate_ afin de démarrer le tutoriel : [https://github.com/WildCodeSchool/workshop-jwt](https://github.com/WildCodeSchool/workshop-jwt).
 
-## 0 - Configuration
-
-### Installation
-
 Installe le projet avec la commande :
 
 ```bash
 npm run setup
 ```
+
+# Backend
+
+## 0 - Configuration
 
 ### Base de données
 
@@ -129,6 +129,8 @@ Installe le module [argon2](https://www.npmjs.com/package/argon2) dans ton proje
 Ensuite modifie ta route `/register` pour crypter le mot de passe de façon synchrone, **avant** qu'il ne soit enregistré dans la base de données.
 
 Vérifie que le mot de passe est bien encrypté dans la base de donnée.
+
+> Attention, le module est a installer en backend !
 
 > Pense à importer le module en haut de ton fichier !
 
@@ -329,6 +331,10 @@ Génère la clé juste avant de renvoyer utilisateur dans la route `/login` et f
 
 ![Login with token - Postman](pictures/5-token-postman.png)
 
+> Attention, le module est a installer en backend !
+
+> Pense à importer le module en haut de ton fichier !
+
 ### Solution
 
 > **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
@@ -521,4 +527,314 @@ Bien sûr, il faudra remplacer le _token_ par celui récupéré lors de la conne
 // src/router.js
 
 router.get("/users", authenticateWithJsonWebToken, UserController.browse);
+```
+
+# Frontend
+
+## 0 - Configuration
+
+Dans le dossier `backend`, copie le fichier `.env.sample` vers `.env`.
+
+## 1 - Formulaire de connexion
+
+La première étape consistera à créer un formulaire qui permettra à un utilisateur de se connecter au backend réalisé précédemment.
+
+Ouvre le composant `Login` et crée un formulaire **contrôlé** contenant :
+
+- un champ pour **email**
+- un champ pour **password**
+- un bouton permettant d'envoyer le formulaire
+
+Crée une fonction `handleSubmit` liée à l'envoie du fomulaire :
+
+- si l'email ou le mot de passe n'est pas renseigné, affiche une boîte d'alerte avec le message "Please specify both email and password"
+- sinon, affiche la valeur des email et mot de passe avec un `console.log`
+
+### Solution
+
+> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+
+```js
+import { useState } from "react";
+
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = () => {
+    if (email && password) {
+      console.log(email, password);
+    } else {
+      alert("Please specify both email and password");
+    }
+  };
+
+  return (
+    <form>
+      <label htmlFor='email'>
+        Email:
+        <input
+          type='email'
+          name='email'
+          id='email'
+          placeholder='test@blabla.com'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </label>
+      <br />
+      <label htmlFor='password'>
+        Password:
+        <input
+          type='password'
+          name='password'
+          id='password'
+          placeholder='***********'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </label>
+      <br />
+      <button type='button' onClick={handleSubmit}>
+        Login
+      </button>
+    </form>
+  );
+};
+
+export default Login;
+```
+
+## 2 - Appel du serveur
+
+Maintenant que ton formulaire est prêt, tu vas contacter le serveur afin qu'il te réponde si l'utilisateur est bien connecté.
+
+Installe le module `axios` et modifie la fonction `handleSubmit` afin d'appeler la route `/login` de ton serveur, en utilisant la variable d'environnement pour l'url du serveur.
+
+Tu peux récupérer une variable d'environnement de la façon suivante :
+
+```js
+import.meta.env.VITE_BACKEND_URL;
+```
+
+Pense que les _email_ et _password_ seront envoyé dans le corps de la requête, tu verras un exemple ici : [https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index](https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index) (dans la section _POST request_).
+
+Si une erreur est récupérée, affiche une boîte d'alerte avec le message correspondant. Il s'agit de la méthode `catch` dont tu peux voir l'utilisation dans la ressource partagée juste avant.
+
+Une fois le contenu de la réponse récupéré, affiche le résultat avec un `console.log`. Si le résultat ressemble au code suivant, c'est gagné :
+
+```json
+{
+  "user": {
+    "id": "son id",
+    "email": "son email",
+    "password": "hidden"
+  },
+  "token": "le token généré"
+}
+```
+
+> Attention, vérifie bien que ton serveur backend est lancé !
+
+### Solution
+
+> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+
+```js
+const handleSubmit = () => {
+  if (email && password) {
+    axios
+      .post(`${import.meta.env.VITE_BACKEND_URL}/login/`, {
+        email,
+        password,
+      })
+      .then((res) => res.data)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        alert(err.response.data.errorMessage);
+      });
+  } else {
+    alert("Please specify both email and password");
+  }
+};
+```
+
+## 3 - Sauvegarde du JSON Web Token
+
+Maintenant que le JWT a bien été reçu, il va falloir le stocker lors de la connexion de l'utilisateur : c'est-à-dire au moment où tu fais actuellement le `console.log` du résultat de l'appel d'axios.
+
+Utilise le **local storage** pour enregistrer dans la clé "TOKEN" la valeur de propriété `token` du JSON reçue.
+
+Tu peux voir comment enregistrer une valeur dans le _local storage_ ici : [https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem).
+
+Ensuite, affiche une boîte d'alerte avec le message "Logged successfully".
+
+### Solution
+
+> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+
+```js
+const handleSubmit = () => {
+  if (email && password) {
+    axios
+      .post(`${import.meta.env.VITE_BACKEND_URL}/login/`, {
+        email,
+        password,
+      })
+      .then((res) => res.data)
+      .then((data) => {
+        localStorage.setItem("TOKEN", data.token);
+        alert("Logged successfully");
+      })
+      .catch((err) => {
+        alert(err.response.data.errorMessage);
+      });
+  } else {
+    alert("Please specify both email and password");
+  }
+};
+```
+
+## 4 - Page authentifiée : liste des utilisateurs
+
+Passe maintenant dans le composant `Users`.
+
+Le but de cette page est d'afficher la liste des utilisateurs.
+
+La première étape va être de récupérer le "TOKEN" stocké dans le _local storage_. Tu trouvera ton bonheur ici :[https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem).
+
+Ensuite, tu vas devoir modifier la fonction `useEffect` afin de faire un appel avec `axios` à la route `/users`. Cette route étant authentifiée par JWT, l'appel vas avoir besoin d'un **header** qui doit aura la forme suivante :
+
+```js
+{
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+}
+```
+
+Tu trouveras comment envoyer des _headers_ avec _axios_ sur le lien suivant : [https://masteringjs.io/tutorials/axios/headers](https://masteringjs.io/tutorials/axios/headers). Fait en sorte de modifier l'exemple pour qu'il ressemble au code ci-dessus.
+
+Si tout se passe bien, modifie le _state_ de `users` et la liste des utilisateurs devrait s'afficher.
+
+S'il y a une erreur (dans la méthode `catch`), vérifie le _status code_ (`error.response.status`). S'il est égal à 401, cela veut dire que la personne n'est pas authentifiée. Afficher une boîte d'alerte avec le message "You're not authorized to access these datas". Si ce n'est pas ce code d'erreur, afficher le message d'erreur récupéré dans la réponse.
+
+> Astuce : faire des `console.log` un peu partout pour t'aider si ça ne marche pas.
+
+### Solution
+
+> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+
+```js
+useEffect(() => {
+  const token = localStorage.getItem("TOKEN");
+  axios
+    .get(`${import.meta.env.VITE_BACKEND_URL}/users`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data)
+    .then((data) => {
+      setUsers(data);
+    })
+    .catch((err) => {
+      let message;
+      if (err.response.status === 401) {
+        message = "You're not authorized to access these datas";
+      } else {
+        message = err.response.data.errorMessage;
+      }
+      alert(message);
+      console.error(err);
+    });
+}, []);
+```
+
+## 5 - Déconnexion de l'utilisateur
+
+Termine maintenant en allant dans le composant `Logout`.
+
+Tu vas gérer la déconnexion de l'utilisateur en supprimant son "TOKEN" du _local storage_ : [https://developer.mozilla.org/en-US/docs/Web/API/Storage/removeItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/removeItem).
+
+Une fois le _token_ supprimé, tu peux afficher une boîte d'alerte avec le message "Disconnected successfully".
+
+**Bonus:** tu peux aussi créer un formulaire de création de compte pour t'entraîner.
+
+### Solution
+
+> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+⋅
+
+```js
+const handleSubmit = () => {
+  localStorage.removeItem("TOKEN");
+  alert("Disconnected successfully");
+};
 ```
