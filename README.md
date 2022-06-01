@@ -1,4 +1,4 @@
-_Fork_ ce _boilerplate_ afin de démarrer le tutoriel : [https://github.com/WildCodeSchool/workshop-jwt](https://github.com/WildCodeSchool/workshop-jwt).
+_Fork_ ce _boilerplate_ avant de démarrer le tutoriel !
 
 Installe le projet avec la commande :
 
@@ -62,7 +62,7 @@ Si tout c'est bien passé, renvoyer un code 201 avec un json ayant la structure 
 
 Teste le tout avec Postman :
 
-- POST http://localhost:8080/register
+- POST http://localhost:5000/register
 - Body / raw / JSON
 - Dans le corps de la requête un JSON, par exemple :
 
@@ -80,18 +80,18 @@ Teste le tout avec Postman :
 
 > **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
 
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 ```js
 // src/controllers/UserController.js
@@ -122,7 +122,7 @@ Teste le tout avec Postman :
 
 Il est très dangereux de laisser le mot de passe de l'utilisateur _en clair_ dans une base de données.
 
-Regarde le lien suivant pour voir comment _hasher_ le mot de passe avec la bibliothèque _argon2_ : [https://www.npmjs.com/package/argon2](https://www.npmjs.com/package/argon2).
+Regarde le lien suivant pour voir comment _hasher_ le mot de passe avec la bibliothèque _argon2_ : [https://github.com/ranisalt/node-argon2#node-argon2](https://github.com/ranisalt/node-argon2#node-argon2).
 
 Installe le module [argon2](https://www.npmjs.com/package/argon2) dans ton projet.
 
@@ -130,7 +130,7 @@ Ensuite modifie ta route `/register` pour crypter le mot de passe de façon sync
 
 Vérifie que le mot de passe est bien encrypté dans la base de donnée.
 
-> Attention, le module est a installer en backend !
+> Attention, le module est à installer en backend !
 
 > Pense à importer le module en haut de ton fichier !
 
@@ -138,18 +138,18 @@ Vérifie que le mot de passe est bien encrypté dans la base de donnée.
 
 > **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
 
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 ```js
 // src/controllers/UserController.js
@@ -206,7 +206,7 @@ Si une erreur survient lors de l'exécution de la requête SQL, renvoyer une err
 
 Si le résultat renvoyé est vide, renvoyer une erreur 403 'Invalid email'.
 
-Si le résultat n'est pas vide, tu vas maintenant vérifier le mot de passe en utilisant la méthode `verify` du module _argon2_. Tu peux trouver un exemple d'utilisation ici : [https://www.npmjs.com/package/argon2](https://www.npmjs.com/package/argon2).
+Si le résultat n'est pas vide, tu vas maintenant vérifier le mot de passe en utilisant la méthode `verify` du module _argon2_. Tu peux trouver un exemple d'utilisation ici : [https://github.com/ranisalt/node-argon2#node-argon2](https://github.com/ranisalt/node-argon2#node-argon2).
 
 > Attention, il faut mettre le mot de passe de la base de données en premier argument, et le mot de passe _en clair_ en second
 
@@ -224,7 +224,7 @@ Sinon renvoie une erreur 403 avec le message 'Invalid password'.
 
 Teste le tout avec Postman :
 
-- POST http://localhost:8080/login
+- POST http://localhost:5000/login
 - Body / raw / JSON
 - Dans le corps de la requête un JSON, par exemple :
 
@@ -241,18 +241,18 @@ Teste le tout avec Postman :
 
 > **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
 
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 ```js
 // src/models/UserManager.js
@@ -331,7 +331,7 @@ Génère la clé juste avant de renvoyer utilisateur dans la route `/login` et f
 
 ![Login with token - Postman](pictures/5-token-postman.png)
 
-> Attention, le module est a installer en backend !
+> Attention, le module est à installer en backend !
 
 > Pense à importer le module en haut de ton fichier !
 
@@ -339,18 +339,18 @@ Génère la clé juste avant de renvoyer utilisateur dans la route `/login` et f
 
 > **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
 
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 ```js
 // src/controllers/UserController.js
@@ -432,18 +432,18 @@ Si tout c'est bien passé, renvoyer un code 200 avec un json ayant la structure 
 
 > **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
 
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 ```js
 // src/controllers/UserController.js
@@ -510,18 +510,18 @@ Bien sûr, il faudra remplacer le _token_ par celui récupéré lors de la conne
 
 > **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
 
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 ```js
 // src/router.js
@@ -554,18 +554,18 @@ Crée une fonction `handleSubmit` liée à l'envoie du fomulaire :
 
 > **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
 
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 ```js
 import { useState } from "react";
@@ -638,11 +638,8 @@ Une fois le contenu de la réponse récupéré, affiche le résultat avec un `co
 
 ```json
 {
-  "user": {
-    "id": "son id",
-    "email": "son email",
-    "password": "hidden"
-  },
+  "id": "son id",
+  "email": "son email",
   "token": "le token généré"
 }
 ```
@@ -653,18 +650,18 @@ Une fois le contenu de la réponse récupéré, affiche le résultat avec un `co
 
 > **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
 
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 ```js
 const handleSubmit = () => {
@@ -679,7 +676,7 @@ const handleSubmit = () => {
         console.log(data);
       })
       .catch((err) => {
-        alert(err.response.data.errorMessage);
+        alert(err.response.data.error);
       });
   } else {
     alert("Please specify both email and password");
@@ -701,18 +698,18 @@ Ensuite, affiche une boîte d'alerte avec le message "Logged successfully".
 
 > **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
 
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 ```js
 const handleSubmit = () => {
@@ -728,7 +725,7 @@ const handleSubmit = () => {
         alert("Logged successfully");
       })
       .catch((err) => {
-        alert(err.response.data.errorMessage);
+        alert(err.response.data.error);
       });
   } else {
     alert("Please specify both email and password");
@@ -766,18 +763,18 @@ S'il y a une erreur (dans la méthode `catch`), vérifie le _status code_ (`erro
 
 > **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
 
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 ```js
 useEffect(() => {
@@ -797,7 +794,7 @@ useEffect(() => {
       if (err.response.status === 401) {
         message = "You're not authorized to access these datas";
       } else {
-        message = err.response.data.errorMessage;
+        message = err.response.data.error;
       }
       alert(message);
       console.error(err);
@@ -819,18 +816,18 @@ Une fois le _token_ supprimé, tu peux afficher une boîte d'alerte avec le mess
 
 > **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
 
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
-⋅
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 
 ```js
 const handleSubmit = () => {
@@ -838,3 +835,13 @@ const handleSubmit = () => {
   alert("Disconnected successfully");
 };
 ```
+
+## Bonus 1 - Récupération du payload du JWT
+
+Lorsqu'un utilisateur se connecte, on récupère le token : ce dernier contient un `payload` (des données stockées en JSON).
+
+Utilise la bibliothèque [jwt-decode](https://www.npmjs.com/package/jwt-decode) pour décoder et logger le `payload`, lors de la connexion d'un utilisateur.
+
+## Bonus 2 - Création de compte
+
+Ajoute le contenu nécessaire à la création d'un compte utilisateur.
