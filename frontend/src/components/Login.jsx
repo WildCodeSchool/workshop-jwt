@@ -1,6 +1,10 @@
 const Login = () => {
-  // TODO your code here
-return <form />;
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // TODO your code here
+  };
+
+  return <form />;
 };
 
 export default Login;

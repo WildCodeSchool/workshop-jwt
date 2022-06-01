@@ -576,7 +576,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     if (email && password) {
       console.log(email, password);
     } else {
@@ -666,7 +667,8 @@ Une fois le contenu de la réponse récupéré, affiche le résultat avec un `co
 -
 
 ```js
-const handleSubmit = () => {
+const handleSubmit = (event) => {
+  event.preventDefault();
   if (email && password) {
     axios
       .post(`${import.meta.env.VITE_BACKEND_URL}/login/`, {
@@ -714,7 +716,8 @@ Ensuite, affiche une boîte d'alerte avec le message "Logged successfully".
 -
 
 ```js
-const handleSubmit = () => {
+const handleSubmit = (event) => {
+  event.preventDefault();
   if (email && password) {
     axios
       .post(`${import.meta.env.VITE_BACKEND_URL}/login/`, {
@@ -832,7 +835,8 @@ Une fois le _token_ supprimé, tu peux afficher une boîte d'alerte avec le mess
 -
 
 ```js
-const handleSubmit = () => {
+const handleSubmit = (event) => {
+  event.preventDefault();
   localStorage.removeItem("TOKEN");
   alert("Disconnected successfully");
 };
