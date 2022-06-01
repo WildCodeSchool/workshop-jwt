@@ -7,86 +7,40 @@ class UserController {
     const { email, password, name } = req.body;
 
     // TODO check if email and/or password are empty or missing
-    if (!email || !password) {
-      res.status(400).send({ error: "Please specify both email and password" });
-      return;
-    }
 
-    try {
-      // TODO hash password
-      const hash = await argon2.hash(password);
+    // TODO hash password
 
-      models.user
-        .insert({ email, password: hash, name })
-        .then(([result]) => {
-          // TODO success response
-          res.status(201).send({ id: result.insertId, email, name });
-        })
-        .catch((err) => {
-          console.error(err);
-          // TODO send error response
-          res.status(500).send({
-            error: err.message,
-          });
-        });
-    } catch (err) {
-      console.error(err);
-      // TODO send error response
-      res.status(500).send({
-        error: err.message,
+    models.user
+      .insert({ email, password, name })
+      .then(([result]) => {
+        // TODO success response
+      })
+      .catch((err) => {
+        console.error(err);
+        // TODO send error response
       });
-    }
   };
 
   static login = (req, res) => {
     const { email, password } = req.body;
 
     // TODO check if email and/or password are empty or missing
-    if (!email || !password) {
-      res.status(400).send({ error: "Please specify both email and password" });
-    }
 
     models.user
       // TODO complete the `findByMail` method in UserManager.js
       .findByMail(email)
       .then(async ([rows]) => {
-        // TODO invalid email
         if (rows[0] == null) {
-          res.status(403).send({
-            error: "Invalid email",
-          });
+          // TODO invalid email
         } else {
-          const { id, email, password: hashedPassword, name } = rows[0];
-
           // TODO check password
-          if (await argon2.verify(hashedPassword, password)) {
-            const token = jwt.sign(
-              { id: id, name: name },
-              process.env.JWT_AUTH_SECRET,
-              {
-                expiresIn: "1h",
-              }
-            );
-
-            res.status(200).send({
-              id,
-              email,
-              name,
-              token,
-            });
-          } else {
-            res.status(403).send({
-              error: "Invalid password",
-            });
-          }
+          // TODO generate JWT
+          // TODO send response
         }
       })
       .catch((err) => {
         console.error(err);
         // TODO send error response
-        res.status(500).send({
-          error: err.message,
-        });
       });
   };
 
@@ -113,19 +67,11 @@ class UserController {
     models.user
       .findAll()
       .then(([rows]) => {
-        res.send(
-          rows.map((user) => {
-            return {
-              id: user.id,
-              email: user.email,
-              name: user.name,
-            };
-          })
-        );
+        // TODO send users without passwords
       })
       .catch((err) => {
         console.error(err);
-        res.sendStatus(500);
+        // TODO send error response
       });
   };
 

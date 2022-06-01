@@ -464,7 +464,9 @@ Si tout c'est bien passé, renvoyer un code 200 avec un json ayant la structure 
       })
       .catch((err) => {
         console.error(err);
-        res.sendStatus(500);
+        res.status(500).send({
+          error: err.message,
+        });
       });
   };
 ```
