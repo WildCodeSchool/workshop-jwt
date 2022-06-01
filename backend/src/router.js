@@ -1,13 +1,20 @@
 const express = require("express");
 
-const { ItemController } = require("./controllers");
+const { UserController } = require("./controllers");
+const {
+  authenticateWithJsonWebToken,
+} = require("./controllers/UserController");
 
 const router = express.Router();
 
-router.get("/items", ItemController.browse);
-router.get("/items/:id", ItemController.read);
-router.put("/items/:id", ItemController.edit);
-router.post("/items", ItemController.add);
-router.delete("/items/:id", ItemController.delete);
+// TODO modify the `register` method in UserController
+router.post("/users/register", UserController.register);
+// TODO modify the `login` method in UserController
+router.post("/users/login", UserController.login);
+
+// TODO call the JWT middleware
+router.get("/users", authenticateWithJsonWebToken, UserController.browse);
+router.put("/users/:id", UserController.edit);
+router.delete("/users/:id", UserController.delete);
 
 module.exports = router;
