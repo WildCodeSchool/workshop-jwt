@@ -154,6 +154,8 @@ Vérifie que le mot de passe est bien encrypté dans la base de donnée.
 ```js
 // src/controllers/UserController.js
 
+  const argon2 = require("argon2");
+
   static register = async (req, res) => {
     const { email, password, name } = req.body;
 
@@ -354,6 +356,8 @@ Génère la clé juste avant de renvoyer utilisateur dans la route `/login` et f
 
 ```js
 // src/controllers/UserController.js
+
+  const jwt = require("jsonwebtoken");
 
   static login = (req, res) => {
     const { email, password } = req.body;
@@ -851,3 +855,9 @@ Utilise la bibliothèque [jwt-decode](https://www.npmjs.com/package/jwt-decode) 
 ## Bonus 2 - Création de compte
 
 Ajoute le contenu nécessaire à la création d'un compte utilisateur.
+
+## Bonus 3 - HTTP Cookies
+
+Plutôt que d'utiliser le localStorage pour gérer les Json Web Token, il est plus sûr d'utiliser les HTTP Cookies.
+
+Change le code afin d'utiliser cette méthode là : [Using Cookies with JWT in Node.js](https://dev.to/franciscomendes10866/using-cookies-with-jwt-in-node-js-8fn)
