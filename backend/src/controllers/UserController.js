@@ -1,5 +1,3 @@
-const argon2 = require("argon2");
-const jwt = require("jsonwebtoken");
 const models = require("../models");
 
 class UserController {
@@ -44,24 +42,7 @@ class UserController {
       });
   };
 
-  static authenticateWithJsonWebToken = (req, res, next) => {
-    if (req.headers.authorization !== undefined) {
-      const token = req.headers.authorization.split(" ")[1];
-      jwt.verify(token, process.env.JWT_AUTH_SECRET, (err) => {
-        if (err) {
-          res
-            .status(401)
-            .json({ error: "you're not allowed to access these data" });
-        } else {
-          next();
-        }
-      });
-    } else {
-      res
-        .status(401)
-        .json({ error: "you're not allowed to access these data" });
-    }
-  };
+  // TODO add authenticateWithJsonWebToken method here!
 
   static browse = (req, res) => {
     models.user

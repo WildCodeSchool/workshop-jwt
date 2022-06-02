@@ -13,7 +13,7 @@ const Users = () => {
       <ul>
         {users.map((user) => (
           <li key={user.id}>
-            {user.id} - email: {user.email}
+            {user.id} - email: {user.email} - name: {user.name}
           </li>
         ))}
       </ul>

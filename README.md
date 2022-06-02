@@ -475,7 +475,7 @@ Si tout c'est bien passé, renvoyer un code 200 avec un json ayant la structure 
 
 Afin de protéger la route `/users` pour que seuls les utilisateurs authentifiés puissent y accéder, tu vas utiliser un _middleware_ qui va récupérer l'entête de la requête et y regarder la présence d'un _token_.
 
-Pour cette partie là, le _middleware_ est déjà fourni et est dans `UserController` :
+Pour cette partie là, ajoute le _middleware_ ci-dessous dans `UserController` :
 
 ```js
 // src/controllers/UserController.js
