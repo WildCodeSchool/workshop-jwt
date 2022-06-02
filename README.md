@@ -549,7 +549,7 @@ Dans le dossier `backend`, copie le fichier `.env.sample` vers `.env`.
 
 La première étape consistera à créer un formulaire qui permettra à un utilisateur de se connecter au backend réalisé précédemment.
 
-Ouvre le composant `Login` et crée un formulaire **contrôlé** contenant :
+Ouvre la page `Login` et crée un formulaire **contrôlé** contenant :
 
 - un champ pour **email**
 - un champ pour **password**
@@ -748,7 +748,7 @@ const handleSubmit = (event) => {
 
 ## 4 - Page authentifiée : liste des utilisateurs
 
-Passe maintenant dans le composant `Users`.
+Passe maintenant dans la page `Users`.
 
 Le but de cette page est d'afficher la liste des utilisateurs.
 
@@ -817,7 +817,7 @@ useEffect(() => {
 
 ## 5 - Déconnexion de l'utilisateur
 
-Termine maintenant en allant dans le composant `Logout`.
+Termine maintenant en allant dans la page `Logout`.
 
 Tu vas gérer la déconnexion de l'utilisateur en supprimant son "TOKEN" du _local storage_ : [https://developer.mozilla.org/en-US/docs/Web/API/Storage/removeItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/removeItem).
 
