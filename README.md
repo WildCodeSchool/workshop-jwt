@@ -698,7 +698,7 @@ const handleSubmit = (event) => {
 
 ## 3 - Saving the JSON Web Token
 
-Now that the JWT has been received, you need to store it when the user logs in: that is, when you actually make the `console.log` of the axios call result.
+Now that the JWT has been received, you need to store it when the user logs in: when you actually make the `console.log` of the axios call result.
 
 Use **local storage** to store the `token` property value of the received JSON in the "TOKEN" key.
 
