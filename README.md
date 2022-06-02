@@ -532,6 +532,10 @@ Bien sûr, il faudra remplacer le _token_ par celui récupéré lors de la conne
 ```js
 // src/router.js
 
+const {
+  authenticateWithJsonWebToken,
+} = require("./controllers/UserController");
+
 router.get("/users", authenticateWithJsonWebToken, UserController.browse);
 ```
 
