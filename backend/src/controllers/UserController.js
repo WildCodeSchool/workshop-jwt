@@ -1,4 +1,5 @@
 const models = require("../models");
+const UserManager = require('../models/UserManager');
 
 class UserController {
   static register = async (req, res) => {
@@ -8,7 +9,7 @@ class UserController {
 
     // TODO hash password
 
-    models.user
+    UserManager
       .insert({ email, password, name })
       .then(([result]) => {
         // TODO success response

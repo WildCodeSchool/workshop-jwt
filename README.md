@@ -38,7 +38,7 @@ The route must retrieve a json with the following structure from the request bod
 {
   "email": "their email",
   "password": "their password",
-  "name": "their name"
+  "role": "their role"
 }
 ```
 
@@ -54,7 +54,7 @@ If all went well, return a 201 code with a json with the following structure:
 {
   "id": "their id",
   "email": "their email",
-  "name": "their name"
+  "role": "their role"
 }
 ```
 
@@ -70,7 +70,7 @@ Test it with Postman:
 {
   "email": "test@test.fr",
   "password": "tacos",
-  "name": "Michel"
+  "role": "admin"
 }
 ```
 
@@ -97,7 +97,7 @@ Test it with Postman:
 // src/controllers/UserController.js
 
   static register = async (req, res) => {
-    const { email, password, name } = req.body;
+    const { email, password, role } = req.body;
 
     if (!email || !password) {
       res.status(400).send({ error: "Please specify both email and password" });
@@ -105,9 +105,9 @@ Test it with Postman:
     }
 
     models.user
-      .insert({ email, password, name })
+      .insert({ email, password, role })
       .then(([result]) => {
-        res.status(201).send({ id: result.insertId, email, name });
+        res.status(201).send({ id: result.insertId, email, role });
       })
       .catch((err) => {
         console.error(err);
@@ -157,7 +157,7 @@ Check that the password is hashed in the database.
   const argon2 = require("argon2");
 
   static register = async (req, res) => {
-    const { email, password, name } = req.body;
+    const { email, password, role } = req.body;
 
     if (!email || !password) {
       res.status(400).send({ error: "Please specify both email and password" });
@@ -168,9 +168,9 @@ Check that the password is hashed in the database.
       const hash = await argon2.hash(password);
 
       models.user
-        .insert({ email, password: hash, name })
+        .insert({ email, password: hash, role })
         .then(([result]) => {
-          res.status(201).send({ id: result.insertId, email, name });
+          res.status(201).send({ id: result.insertId, email, role });
         })
         .catch((err) => {
           console.error(err);
@@ -218,7 +218,7 @@ If all the password is the same, return a 200 code with a json with the followin
 {
   "id": "their id",
   "email": "their email",
-  "name": "their name"
+  "role": "their role"
 }
 ```
 
@@ -283,13 +283,13 @@ Test this with Postman:
             error: "Invalid email",
           });
         } else {
-          const { id, email, password: hashedPassword, name } = rows[0];
+          const { id, email, password: hashedPassword, role } = rows[0];
 
           if (await argon2.verify(hashedPassword, password)) {
             res.status(200).send({
               id,
               email,
-              name,
+              role,
             });
           } else {
             res.status(403).send({
@@ -317,7 +317,7 @@ Next, you will use the [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken
 
 - install the module
 - module, use the `sign` method to generate a JWT, using the secret key charred from the environment variables.
-- The _payload_ of the key will be the following json: `json { id: id, name: name }`
+- The _payload_ of the key will be the following json: `json { id: id, role: role }`
 - the expiry date `expiresIn` will be one hour.
 
 Generate the key just before returning user in the `/users/login` route and make the structure of the JSON as follows:
@@ -326,7 +326,7 @@ Generate the key just before returning user in the `/users/login` route and make
 {
   "id": "their id",
   "email": "their email",
-  "name": "their name",
+  "role": "their role",
   "token": "their generated token"
 }
 ```
@@ -374,11 +374,11 @@ Generate the key just before returning user in the `/users/login` route and make
             error: "Invalid email",
           });
         } else {
-          const { id, email, password: hashedPassword, name } = rows[0];
+          const { id, email, password: hashedPassword, role } = rows[0];
 
           if (await argon2.verify(hashedPassword, password)) {
             const token = jwt.sign(
-              { id: id, name: name },
+              { id: id, role: role },
               process.env.JWT_AUTH_SECRET,
               {
                 expiresIn: "1h",
@@ -388,7 +388,7 @@ Generate the key just before returning user in the `/users/login` route and make
             res.status(200).send({
               id,
               email,
-              name,
+              role,
               token,
             });
           } else {
@@ -420,12 +420,12 @@ If all went well, return a 200 code with a json with the following structure:
   {
     "id": 1,
     "email": "test@test.fr",
-    "name": "Michel"
+    "role": "admin"
   },
   {
     "id": 2,
     "email": "tacos@test.fr",
-    "name": "tacosman"
+    "role": "user"
   }
 ]
 ```
@@ -456,12 +456,13 @@ If all went well, return a 200 code with a json with the following structure:
     models.user
       .findAll()
       .then(([rows]) => {
+        res.status(200).send(rows);
         res.send(
           rows.map((user) => {
             return {
               id: user.id,
               email: user.email,
-              name: user.name,
+              role: user.role,
             };
           })
         );
@@ -484,22 +485,20 @@ For this part, add the _middleware_ below to the `UserController`:
 ```js
 // src/controllers/UserController.js
 
-  static authenticateWithJsonWebToken = (req, res, next) => {
-    if (req.headers.authorization !== undefined) {
+  static authorization = (req, res, next) => {
+    if (req.headers.authorization) {
       const token = req.headers.authorization.split(' ')[1];
-      jwt.verify(token, process.env.JWT_AUTH_SECRET, (err) => {
+      jwt.verify(token, process.env.JWT_AUTH_SECRET, (err, decoded) => {
         if (err) {
-          res
-            .status(401)
-            .json({ error: "you're not allowed to access these data" });
+          res.sendStatus(401);
         } else {
+          req.userId = decoded.id;
+          req.userRole = decoded.role;
           next();
         }
       });
     } else {
-      res
-        .status(401)
-        .json({ error: "you're not allowed to access these data" });
+      res.sendStatus(401);
     }
   };
 ```
@@ -803,13 +802,9 @@ useEffect(() => {
       setUsers(data);
     })
     .catch((err) => {
-      let message;
       if (err.response.status === 401) {
-        message = "You're not authorized to access these datas";
-      } else {
-        message = err.response.data.error;
+        alert("You're not authorized to access these datas");
       }
-      alert(message);
       console.error(err);
     });
 }, []);
