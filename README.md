@@ -1,6 +1,6 @@
 _Fork_ this _boilerplate_ before starting the tutorial!
 
-Install the project with the command :
+Install the project with the command:
 
 ```bash
 npm run setup
@@ -22,7 +22,7 @@ In the `backend` folder, copy the `.env.sample` file to `.env` and change the en
 
 ### Running
 
-You can start the project with the command :
+You can start the project with the command:
 
 ```bash
 npm run dev
@@ -36,9 +36,9 @@ The route must retrieve a json with the following structure from the request bod
 
 ```json
 {
-  "email": "son email",
-  "password": "son mot de passe",
-  "name": "son nom"
+  "email": "their email",
+  "password": "their password",
+  "name": "their name"
 }
 ```
 
@@ -52,19 +52,19 @@ If all went well, return a 201 code with a json with the following structure:
 
 ```json
 {
-  "id": "son id",
-  "email": "son email",
-  "name": "son nom"
+  "id": "their id",
+  "email": "their email",
+  "name": "their name"
 }
 ```
 
 > Do not return the password
 
-Test it with Postman :
+Test it with Postman:
 
 - POST http://localhost:5000/users/register
 - Body / raw / JSON
-- In the body of the request a JSON, for example :
+- In the body of the request a JSON, for example:
 
 ```json
 {
@@ -78,7 +78,7 @@ Test it with Postman :
 
 ### Solution
 
-> **Warning**: try to do the exercise yourself before looking at the solution!
+> **Warning**: try to do the exercise by yourself before looking at the solution!
 
 -
 -
@@ -120,15 +120,15 @@ Test it with Postman :
 
 ## 2 - Password hashing
 
-It is very dangerous to leave the user's password _in the clear_ in a database.
+It is very dangerous to leave the user's _clear_ password in a database.
 
 Look at the following link to see how to _hash_ the password with the _argon2_ library: [https://github.com/ranisalt/node-argon2#node-argon2](https://github.com/ranisalt/node-argon2#node-argon2).
 
 Install the [argon2](https://www.npmjs.com/package/argon2) module in your project.
 
-Then modify your `/users/register` route to encrypt the password synchronously, **before** it is stored in the database.
+Then modify your `/users/register` route to hash the password, **before** it is stored in the database.
 
-Check that the password is encrypted in the database.
+Check that the password is hashed in the database.
 
 > Be careful, the module must be installed in the backend!
 
@@ -136,7 +136,7 @@ Check that the password is encrypted in the database.
 
 ### Solution
 
-> **Warning**: try to do the exercise yourself before looking at the solution!
+> **Warning**: try to do the exercise by yourself before looking at the solution!
 
 -
 -
@@ -195,14 +195,14 @@ The route must retrieve a json with the following structure from the request bod
 
 ```json
 {
-  "email": "son email",
-  "password": "son mot de passe"
+  "email": "their email",
+  "password": "their password"
 }
 ```
 
-If neither the email nor the password is filled in, return a 400 error 'Please specify both email and password'.
+If neither the email nor the password are filled in, return a 400 error 'Please specify both email and password'.
 
-If they are specified, make a request to the database and check that the email exists (**test the email only, not the password!)**).
+If they are both specified, make a request to the database and check that the email exists (**test the email only, not the password!)**).
 
 If an error occurs during the execution of the SQL query, return an error 500 with the corresponding error message.
 
@@ -210,25 +210,25 @@ If the result returned is empty, return a 403 'Invalid email' error.
 
 If the result is not empty, you will now verify the password using the `verify` method of the _argon2_ module. You can find an example here: [https://github.com/ranisalt/node-argon2#node-argon2](https://github.com/ranisalt/node-argon2#node-argon2).
 
-> Be careful, you have to put the database password as the first argument, and the _cleartext_ password as the second
+> Be careful, you have to put the database password as the first argument, and the _clear_ password as the second
 
 If all the password is the same, return a 200 code with a json with the following structure:
 
 ```json
 {
-  "id": "son id",
-  "email": "son email",
-  "name": "son nom"
+  "id": "their id",
+  "email": "their email",
+  "name": "their name"
 }
 ```
 
 Otherwise returns a 403 error with the message 'Invalid password'.
 
-Test this with Postman :
+Test this with Postman:
 
 - POST http://localhost:5000/users/login
 - Body / raw / JSON
-- In the body of the request a JSON, for example :
+- In the body of the request a JSON, for example:
 
 ```json
 {
@@ -241,7 +241,7 @@ Test this with Postman :
 
 ### Solution
 
-> **Warning**: try to do the exercise yourself before looking at the solution!
+> **Warning**: try to do the exercise by yourself before looking at the solution!
 
 -
 -
@@ -324,10 +324,10 @@ Generate the key just before returning user in the `/users/login` route and make
 
 ```json
 {
-  "id": "son id",
-  "email": "son email",
-  "name": "son nom",
-  "token": "le token généré"
+  "id": "their id",
+  "email": "their email",
+  "name": "their name",
+  "token": "their generated token"
 }
 ```
 
@@ -434,7 +434,7 @@ If all went well, return a 200 code with a json with the following structure:
 
 ### Solution
 
-> **Warning**: try to do the exercise yourself before looking at the solution!
+> **Warning**: try to do the exercise by yourself before looking at the solution!
 
 -
 -
@@ -514,7 +514,7 @@ Of course, you'll have to replace the _token_ with the one you got when you logg
 
 ### Solution
 
-> **Warning**: try to do the exercise yourself before looking at the solution!
+> **Warning**: try to do the exercise by yourself before looking at the solution!
 
 -
 -
@@ -543,17 +543,17 @@ router.get("/users", authenticateWithJsonWebToken, UserController.browse);
 
 ## 0 - Configuration
 
-In the `backend` folder, copy the `.env.sample` file to `.env`.
+In the `frontend` folder, copy the `.env.sample` file to `.env`.
 
 ## 1 - Login form
 
 The first step will be to create a form that will allow a user to log into the backend made earlier.
 
-Open the `Login` page and create a **controlled** form containing :
+Open the `Login` page and create a **controlled** form containing:
 
 - a field for **email**
 - a field for **password**
-- a button to submit the form
+- an input to submit the form
 
 Creates a `handleSubmit` function linked to the form submission:
 
@@ -594,7 +594,7 @@ const Login = () => {
   };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <label htmlFor='email'>
         Email:
         <input
@@ -619,9 +619,7 @@ const Login = () => {
         />
       </label>
       <br />
-      <button type='button' onClick={handleSubmit}>
-        Login
-      </button>
+      <input type='submit' value='Login' />
     </form>
   );
 };
@@ -645,15 +643,15 @@ import.meta.env.VITE_BACKEND_URL;
 
 Think that the _email_ and _password_ will be sent in the body of the request, you can see an example here: [https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index](https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index) (in the _POST request_ section).
 
-If an error is retrieved, it displays an alert box with the corresponding message. This is the `catch` method which you can see used in the shared resource above.
+If an error is catched, it displays an alert box with the corresponding message. This is the `catch` method which you can see used in the shared resource above.
 
 Once the contents of the response are retrieved, display the result with a `console.log`. If the result looks like the following code, you're in:
 
 ```json
 {
-  "id": "son id",
-  "email": "son email",
-  "token": "le token généré"
+  "id": "their id",
+  "email": "their email",
+  "token": "their generated token"
 }
 ```
 
@@ -710,7 +708,7 @@ Then display an alert box with the message "Logged successfully".
 
 ### Solution
 
-> **Warning**: try to do the exercise yourself before looking at the solution!
+> **Warning**: try to do the exercise by yourself before looking at the solution!
 
 -
 -
@@ -776,7 +774,7 @@ If there is an error (in the `catch` method), check the _status code_ (`error.re
 
 ### Solution
 
-> **Warning**: try to do the exercise yourself before looking at the solution!
+> **Warning**: try to do the exercise by yourself before looking at the solution!
 
 -
 -
@@ -829,7 +827,7 @@ Once the _token_ is deleted, you can display an alert box with the message "Disc
 
 ### Solution
 
-> **Warning**: try to do the exercise yourself before looking at the solution!
+> **Warning**: try to do the exercise by yourself before looking at the solution!
 
 -
 -

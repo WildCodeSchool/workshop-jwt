@@ -5,10 +5,8 @@ const Logout = () => {
   };
 
   return (
-    <form>
-      <button type='button' onClick={handleSubmit}>
-        Disconnect
-      </button>
+    <form onSubmit={handleSubmit}>
+      <input type='submit' value='Disconnect' />
     </form>
   );
 };

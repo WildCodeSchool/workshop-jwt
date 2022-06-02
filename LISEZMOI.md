@@ -126,9 +126,9 @@ Regarde le lien suivant pour voir comment _hasher_ le mot de passe avec la bibli
 
 Installe le module [argon2](https://www.npmjs.com/package/argon2) dans ton projet.
 
-Ensuite modifie ta route `/users/register` pour crypter le mot de passe de façon synchrone, **avant** qu'il ne soit enregistré dans la base de données.
+Ensuite modifie ta route `/users/register` pour hasher le mot de passe, **avant** qu'il ne soit enregistré dans la base de données.
 
-Vérifie que le mot de passe est bien encrypté dans la base de donnée.
+Vérifie que le mot de passe est bien hashé dans la base de donnée.
 
 > Attention, le module est à installer en backend !
 
@@ -543,7 +543,7 @@ router.get("/users", authenticateWithJsonWebToken, UserController.browse);
 
 ## 0 - Configuration
 
-Dans le dossier `backend`, copie le fichier `.env.sample` vers `.env`.
+Dans le dossier `frontend`, copie le fichier `.env.sample` vers `.env`.
 
 ## 1 - Formulaire de connexion
 
@@ -594,7 +594,7 @@ const Login = () => {
   };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <label htmlFor='email'>
         Email:
         <input
@@ -619,9 +619,7 @@ const Login = () => {
         />
       </label>
       <br />
-      <button type='button' onClick={handleSubmit}>
-        Login
-      </button>
+      <input type='submit' value='Login' />
     </form>
   );
 };
