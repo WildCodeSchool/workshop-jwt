@@ -1,6 +1,6 @@
-_Fork_ ce _boilerplate_ avant de démarrer le tutoriel !
+_Fork_ this _boilerplate_ before starting the tutorial!
 
-Installe le projet avec la commande :
+Install the project with the command :
 
 ```bash
 npm run setup
@@ -10,29 +10,29 @@ npm run setup
 
 ## 0 - Configuration
 
-### Base de données
+### Database
 
-Afin de gérer l'inscription et la connexion d'utilisateurs, crée une nouvelle base de données nommée `jwtcourse` et importe le script `backend/database.sql` afin de recréer la table `user` suivante :
+In order to manage user registration and login, create a new database named `jwtcourse` and import the script `backend/database.sql` to recreate the following `user` table:
 
 ![Database](pictures/2-database.png)
 
-### Variables d'environnements
+### Environment variables
 
-Dans le dossier `backend`, copie le fichier `.env.sample` vers `.env` et modifie les variables d'environnements correspondantes à la base de données.
+In the `backend` folder, copy the `.env.sample` file to `.env` and change the environment variables for the database.
 
-### Exécution
+### Running
 
-Tu pourras démarrer le projet avec la commande :
+You can start the project with the command :
 
 ```bash
 npm run dev
 ```
 
-## 1 - Création d'un compte utilisateur
+## 1 - Creating a user account
 
-Modifie la route en POST `/users/register` qui va permettre la création d'un compte utilisateur.
+Modify the POST route `/users/register` which will allow the creation of a user account.
 
-La route doit récupérer du corps de la requête un json à la structure suivante :
+The route must retrieve a json with the following structure from the request body:
 
 ```json
 {
@@ -42,13 +42,13 @@ La route doit récupérer du corps de la requête un json à la structure suivan
 }
 ```
 
-Si l'email ou le mot de passe ne sont pas renseignés, renvoyer une erreur 400 'Please specify both email and password'.
+If the email or password are not filled in, return an error 400 'Please specify both email and password'.
 
-Dans le cas où ils sont renseignés, faire une requête à la base de données et insérer les données dans la table `user`.
+If they are, query the database and insert the data into the `user` table.
 
-Si une erreur survient lors de l'exécution de la requête SQL, renvoyer une erreur 500 avec le message d'erreur correspondant.
+If an error occurs while executing the SQL query, return an error 500 with the corresponding error message.
 
-Si tout c'est bien passé, renvoyer un code 201 avec un json ayant la structure suivante :
+If all went well, return a 201 code with a json with the following structure:
 
 ```json
 {
@@ -58,13 +58,13 @@ Si tout c'est bien passé, renvoyer un code 201 avec un json ayant la structure 
 }
 ```
 
-> Ne pas renvoyer le mot de passe renseigné
+> Do not return the password
 
-Teste le tout avec Postman :
+Test it with Postman :
 
 - POST http://localhost:5000/users/register
 - Body / raw / JSON
-- Dans le corps de la requête un JSON, par exemple :
+- In the body of the request a JSON, for example :
 
 ```json
 {
@@ -78,7 +78,7 @@ Teste le tout avec Postman :
 
 ### Solution
 
-> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+> **Warning**: try to do the exercise yourself before looking at the solution!
 
 -
 -
@@ -118,25 +118,25 @@ Teste le tout avec Postman :
   };
 ```
 
-## 2 - Hashage du mot de passe
+## 2 - Password hashing
 
-Il est très dangereux de laisser le mot de passe de l'utilisateur _en clair_ dans une base de données.
+It is very dangerous to leave the user's password _in the clear_ in a database.
 
-Regarde le lien suivant pour voir comment _hasher_ le mot de passe avec la bibliothèque _argon2_ : [https://github.com/ranisalt/node-argon2#node-argon2](https://github.com/ranisalt/node-argon2#node-argon2).
+Look at the following link to see how to _hash_ the password with the _argon2_ library: [https://github.com/ranisalt/node-argon2#node-argon2](https://github.com/ranisalt/node-argon2#node-argon2).
 
-Installe le module [argon2](https://www.npmjs.com/package/argon2) dans ton projet.
+Install the [argon2](https://www.npmjs.com/package/argon2) module in your project.
 
-Ensuite modifie ta route `/users/register` pour crypter le mot de passe de façon synchrone, **avant** qu'il ne soit enregistré dans la base de données.
+Then modify your `/users/register` route to encrypt the password synchronously, **before** it is stored in the database.
 
-Vérifie que le mot de passe est bien encrypté dans la base de donnée.
+Check that the password is encrypted in the database.
 
-> Attention, le module est à installer en backend !
+> Be careful, the module must be installed in the backend!
 
-> Pense à importer le module en haut de ton fichier !
+> Remember to import the module at the top of your file!
 
 ### Solution
 
-> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+> **Warning**: try to do the exercise yourself before looking at the solution!
 
 -
 -
@@ -187,11 +187,11 @@ Vérifie que le mot de passe est bien encrypté dans la base de donnée.
   };
 ```
 
-## 3 - Connexion au compte utilisateur
+## 3 - User account login
 
-Créer une route en POST `/users/login` qui va permettre la connexion d'un compte utilisateur.
+Create a POST route `/users/login` that will allow the connection of a user account.
 
-La route doit récupérer du corps de la requête un json à la structure suivante :
+The route must retrieve a json with the following structure from the request body:
 
 ```json
 {
@@ -200,19 +200,19 @@ La route doit récupérer du corps de la requête un json à la structure suivan
 }
 ```
 
-Si l'email ou le mot de passe ne sont pas renseignés, renvoyer une erreur 400 'Please specify both email and password'.
+If neither the email nor the password is filled in, return a 400 error 'Please specify both email and password'.
 
-Dans le cas où ils sont renseignés, faire une requête à la base de données et vérifier que l'email existe bien (**tester l'email uniquement, pas le mot de passe !**).
+If they are specified, make a request to the database and check that the email exists (**test the email only, not the password!)**).
 
-Si une erreur survient lors de l'exécution de la requête SQL, renvoyer une erreur 500 avec le message d'erreur correspondant.
+If an error occurs during the execution of the SQL query, return an error 500 with the corresponding error message.
 
-Si le résultat renvoyé est vide, renvoyer une erreur 403 'Invalid email'.
+If the result returned is empty, return a 403 'Invalid email' error.
 
-Si le résultat n'est pas vide, tu vas maintenant vérifier le mot de passe en utilisant la méthode `verify` du module _argon2_. Tu peux trouver un exemple d'utilisation ici : [https://github.com/ranisalt/node-argon2#node-argon2](https://github.com/ranisalt/node-argon2#node-argon2).
+If the result is not empty, you will now verify the password using the `verify` method of the _argon2_ module. You can find an example here: [https://github.com/ranisalt/node-argon2#node-argon2](https://github.com/ranisalt/node-argon2#node-argon2).
 
-> Attention, il faut mettre le mot de passe de la base de données en premier argument, et le mot de passe _en clair_ en second
+> Be careful, you have to put the database password as the first argument, and the _cleartext_ password as the second
 
-Si tout le mot de passe est identique, renvoyer un code 200 avec un json ayant la structure suivante :
+If all the password is the same, return a 200 code with a json with the following structure:
 
 ```json
 {
@@ -222,13 +222,13 @@ Si tout le mot de passe est identique, renvoyer un code 200 avec un json ayant l
 }
 ```
 
-Sinon renvoie une erreur 403 avec le message 'Invalid password'.
+Otherwise returns a 403 error with the message 'Invalid password'.
 
-Teste le tout avec Postman :
+Test this with Postman :
 
 - POST http://localhost:5000/users/login
 - Body / raw / JSON
-- Dans le corps de la requête un JSON, par exemple :
+- In the body of the request a JSON, for example :
 
 ```json
 {
@@ -241,7 +241,7 @@ Teste le tout avec Postman :
 
 ### Solution
 
-> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+> **Warning**: try to do the exercise yourself before looking at the solution!
 
 -
 -
@@ -307,20 +307,20 @@ Teste le tout avec Postman :
   };
 ```
 
-## 4 - Création d'un JSON Web Token
+## 4 - Creating a JSON Web Token
 
-Tu rentres enfin dans le vif du sujet : la génération du JWT grâce à une clef secrète.
+You are finally getting to the heart of the matter: generating the JWT using a secret key.
 
-Commence par renseigner une clé secrète dans le fichier `.env`. Tu peux générer une clé sécurisée ici : [https://www.grc.com/passwords.htm](https://www.grc.com/passwords.htm).
+Start by filling in a secret key in the `.env` file. You can generate a secure key here: [https://www.grc.com/passwords.htm](https://www.grc.com/passwords.htm).
 
-Ensuite, tu vas utiliser le module [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) pour effectuer la génération de la clé :
+Next, you will use the [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) module to perform the key generation:
 
-- installe le module
-- utilise la méthode `sign` afin de générer un JWT, en utilisant la clé secrète charchée à partir des variables d'environnement.
-- Le _payload_ de la clé sera le json suivant : `json { id: id, name: name }`
-- la date d'expiration `expiresIn` sera de une heure.
+- install the module
+- module, use the `sign` method to generate a JWT, using the secret key charred from the environment variables.
+- The _payload_ of the key will be the following json: `json { id: id, name: name }`
+- the expiry date `expiresIn` will be one hour.
 
-Génère la clé juste avant de renvoyer utilisateur dans la route `/users/login` et fait en sorte que la structure du JSON soit la suivante :
+Generate the key just before returning user in the `/users/login` route and make the structure of the JSON as follows:
 
 ```json
 {
@@ -333,13 +333,13 @@ Génère la clé juste avant de renvoyer utilisateur dans la route `/users/login
 
 ![Login with token - Postman](pictures/5-token-postman.png)
 
-> Attention, le module est à installer en backend !
+> Be careful, the module has to be installed in the backend!
 
-> Pense à importer le module en haut de ton fichier !
+> Remember to import the module at the top of your file!
 
 ### Solution
 
-> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+> **Warning**: try to do the exercise by yourself before looking at the solution!
 
 -
 -
@@ -407,13 +407,13 @@ Génère la clé juste avant de renvoyer utilisateur dans la route `/users/login
   };
 ```
 
-## 5 - Afficher la liste des utilisateurs
+## 5 - Displaying the list of users
 
-Créer une route en GET `/users` qui récupère la liste des utilisateurs.
+Create a GET `/users` route that retrieves the list of users.
 
-Si une erreur survient lors de l'exécution de la requête SQL, renvoyer une erreur 500 avec le message d'erreur correspondant.
+If an error occurs during the execution of the SQL query, return an error 500 with the corresponding error message.
 
-Si tout c'est bien passé, renvoyer un code 200 avec un json ayant la structure suivante :
+If all went well, return a 200 code with a json with the following structure:
 
 ```json
 [
@@ -430,11 +430,11 @@ Si tout c'est bien passé, renvoyer un code 200 avec un json ayant la structure 
 ]
 ```
 
-> Pense à supprimer de l'affichage le mot de passe de chaque utilisateur !
+> Remember to remove the password of each user from the display!
 
 ### Solution
 
-> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+> **Warning**: try to do the exercise yourself before looking at the solution!
 
 -
 -
@@ -475,11 +475,11 @@ Si tout c'est bien passé, renvoyer un code 200 avec un json ayant la structure 
   };
 ```
 
-## 6 - Création d'un middleware d'authentification
+## 6 - Creating authentication middleware
 
-Afin de protéger la route `/users` pour que seuls les utilisateurs authentifiés puissent y accéder, tu vas utiliser un _middleware_ qui va récupérer l'entête de la requête et y regarder la présence d'un _token_.
+In order to protect the `/users` route so that only authenticated users can access it, you will use _middleware_ which will retrieve the request header and look for a _token_.
 
-Pour cette partie là, ajoute le _middleware_ ci-dessous dans `UserController` :
+For this part, add the _middleware_ below to the `UserController`:
 
 ```js
 // src/controllers/UserController.js
@@ -504,17 +504,17 @@ Pour cette partie là, ajoute le _middleware_ ci-dessous dans `UserController` :
   };
 ```
 
-Tu vas devoir modifier la route `/user` dans `src/router.js`, afin qu'elle charge ce _middleware_.
+You'll need to modify the `/user` route in `src/router.js`, so that it loads this _middleware_.
 
-Teste ensuite la route avec Postman, en renseignant l'entête suivante : `Authorization: Bearer eyJhbG.. ...8RvKts`
+Then test the route with Postman, by filling in the following header: `Authorization: Bearer eyJhbG.. ...8RvKts`
 
-Bien sûr, il faudra remplacer le _token_ par celui récupéré lors de la connexion de l'utilisateur dans l'étape 4.
+Of course, you'll have to replace the _token_ with the one you got when you logged in in step 4.
 
 ![Login with token - Postman](pictures/6-bearer-postman.png)
 
 ### Solution
 
-> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+> **Warning**: try to do the exercise yourself before looking at the solution!
 
 -
 -
@@ -543,26 +543,26 @@ router.get("/users", authenticateWithJsonWebToken, UserController.browse);
 
 ## 0 - Configuration
 
-Dans le dossier `backend`, copie le fichier `.env.sample` vers `.env`.
+In the `backend` folder, copy the `.env.sample` file to `.env`.
 
-## 1 - Formulaire de connexion
+## 1 - Login form
 
-La première étape consistera à créer un formulaire qui permettra à un utilisateur de se connecter au backend réalisé précédemment.
+The first step will be to create a form that will allow a user to log into the backend made earlier.
 
-Ouvre la page `Login` et crée un formulaire **contrôlé** contenant :
+Open the `Login` page and create a **controlled** form containing :
 
-- un champ pour **email**
-- un champ pour **password**
-- un bouton permettant d'envoyer le formulaire
+- a field for **email**
+- a field for **password**
+- a button to submit the form
 
-Crée une fonction `handleSubmit` liée à l'envoie du fomulaire :
+Creates a `handleSubmit` function linked to the form submission:
 
-- si l'email ou le mot de passe n'est pas renseigné, affiche une boîte d'alerte avec le message "Please specify both email and password"
-- sinon, affiche la valeur des email et mot de passe avec un `console.log`
+- if the email or password is not filled in, displays an alert box with the message "Please specify both email and password"
+- otherwise, displays the email and password values with a `console.log`.
 
 ### Solution
 
-> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+> **Warning**: try to do the exercise by yourself before looking at the solution!
 
 -
 -
@@ -629,25 +629,25 @@ const Login = () => {
 export default Login;
 ```
 
-## 2 - Appel du serveur
+## 2 - Calling the server
 
-Maintenant que ton formulaire est prêt, tu vas contacter le serveur afin qu'il te réponde si l'utilisateur est bien connecté.
+Now that you have your form ready, you will contact the server and have it respond to you if the user is logged in.
 
-Installe le module `axios` et modifie la fonction `handleSubmit` afin d'appeler la route `/users/login` de ton serveur, en utilisant la variable d'environnement pour l'url du serveur.
+Install the `axios` module and modify the `handleSubmit` function to call the `/users/login` route on your server, using the environment variable for the server url.
 
-> Attention, le module est à installer en frontend !
+> Be careful, the module has to be installed in the frontend!
 
-Tu peux récupérer une variable d'environnement de la façon suivante :
+You can get an environment variable as follows:
 
 ```js
 import.meta.env.VITE_BACKEND_URL;
 ```
 
-Pense que les _email_ et _password_ seront envoyé dans le corps de la requête, tu verras un exemple ici : [https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index](https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index) (dans la section _POST request_).
+Think that the _email_ and _password_ will be sent in the body of the request, you can see an example here: [https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index](https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index) (in the _POST request_ section).
 
-Si une erreur est récupérée, affiche une boîte d'alerte avec le message correspondant. Il s'agit de la méthode `catch` dont tu peux voir l'utilisation dans la ressource partagée juste avant.
+If an error is retrieved, it displays an alert box with the corresponding message. This is the `catch` method which you can see used in the shared resource above.
 
-Une fois le contenu de la réponse récupéré, affiche le résultat avec un `console.log`. Si le résultat ressemble au code suivant, c'est gagné :
+Once the contents of the response are retrieved, display the result with a `console.log`. If the result looks like the following code, you're in:
 
 ```json
 {
@@ -657,11 +657,11 @@ Une fois le contenu de la réponse récupéré, affiche le résultat avec un `co
 }
 ```
 
-> Attention, vérifie bien que ton serveur backend est lancé !
+> Make sure your backend server is running!
 
 ### Solution
 
-> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+> **Warning**: try to do the exercise by yourself before looking at the solution!
 
 -
 -
@@ -698,19 +698,19 @@ const handleSubmit = (event) => {
 };
 ```
 
-## 3 - Sauvegarde du JSON Web Token
+## 3 - Saving the JSON Web Token
 
-Maintenant que le JWT a bien été reçu, il va falloir le stocker lors de la connexion de l'utilisateur : c'est-à-dire au moment où tu fais actuellement le `console.log` du résultat de l'appel d'axios.
+Now that the JWT has been received, you need to store it when the user logs in: that is, when you actually make the `console.log` of the axios call result.
 
-Utilise le **local storage** pour enregistrer dans la clé "TOKEN" la valeur de propriété `token` du JSON reçue.
+Use **local storage** to store the `token` property value of the received JSON in the "TOKEN" key.
 
-Tu peux voir comment enregistrer une valeur dans le _local storage_ ici : [https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem).
+You can see how to store a value in _local storage_ here: [https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem).
 
-Ensuite, affiche une boîte d'alerte avec le message "Logged successfully".
+Then display an alert box with the message "Logged successfully".
 
 ### Solution
 
-> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+> **Warning**: try to do the exercise yourself before looking at the solution!
 
 -
 -
@@ -748,15 +748,15 @@ const handleSubmit = (event) => {
 };
 ```
 
-## 4 - Page authentifiée : liste des utilisateurs
+## 4 - Authenticated page: list of users
 
-Passe maintenant dans la page `Users`.
+Now go to the `Users` page.
 
-Le but de cette page est d'afficher la liste des utilisateurs.
+The purpose of this page is to display the list of users.
 
-La première étape va être de récupérer le "TOKEN" stocké dans le _local storage_. Tu trouvera ton bonheur ici :[https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem).
+The first step will be to retrieve the "TOKEN" stored in the _local storage_. You can find it here:[https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem).
 
-Ensuite, tu vas devoir modifier la fonction `useEffect` afin de faire un appel avec `axios` à la route `/users`. Cette route étant authentifiée par JWT, l'appel vas avoir besoin d'un **header** qui doit aura la forme suivante :
+Next, you'll need to modify the `useEffect` function to make a call with `axios` to the `/users` route. Since this route is authenticated by JWT, the call will need a **header** of the following form:
 
 ```js
 {
@@ -766,17 +766,17 @@ Ensuite, tu vas devoir modifier la fonction `useEffect` afin de faire un appel a
 }
 ```
 
-Tu trouveras comment envoyer des _headers_ avec _axios_ sur le lien suivant : [https://masteringjs.io/tutorials/axios/headers](https://masteringjs.io/tutorials/axios/headers). Fait en sorte de modifier l'exemple pour qu'il ressemble au code ci-dessus.
+You can find out how to send _headers_ with _axios_ at the following link: [https://masteringjs.io/tutorials/axios/headers](https://masteringjs.io/tutorials/axios/headers). Make sure you modify the example to look like the code above.
 
-Si tout se passe bien, modifie le _state_ de `users` et la liste des utilisateurs devrait s'afficher.
+If all goes well, change the _state_ of `users` and the list of users should appear.
 
-S'il y a une erreur (dans la méthode `catch`), vérifie le _status code_ (`error.response.status`). S'il est égal à 401, cela veut dire que la personne n'est pas authentifiée. Afficher une boîte d'alerte avec le message "You're not authorized to access these datas". Si ce n'est pas ce code d'erreur, afficher le message d'erreur récupéré dans la réponse.
+If there is an error (in the `catch` method), check the _status code_ (`error.response.status`). If it equals 401, it means that the person is not authenticated. Display an alert box with the message "You're not authorized to access these datas". If it is not this error code, display the error message retrieved from the response.
 
-> Astuce : faire des `console.log` un peu partout pour t'aider si ça ne marche pas.
+> Tip: make `console.log` everywhere to help you if it doesn't work.
 
 ### Solution
 
-> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+> **Warning**: try to do the exercise yourself before looking at the solution!
 
 -
 -
@@ -817,19 +817,19 @@ useEffect(() => {
 }, []);
 ```
 
-## 5 - Déconnexion de l'utilisateur
+## 5 - Logging out the user
 
-Termine maintenant en allant dans la page `Logout`.
+Finish now by going to the Logout page.
 
-Tu vas gérer la déconnexion de l'utilisateur en supprimant son "TOKEN" du _local storage_ : [https://developer.mozilla.org/en-US/docs/Web/API/Storage/removeItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/removeItem).
+You will manage the user's logout by deleting their "TOKEN" from _local storage_: [https://developer.mozilla.org/en-US/docs/Web/API/Storage/removeItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/removeItem).
 
-Une fois le _token_ supprimé, tu peux afficher une boîte d'alerte avec le message "Disconnected successfully".
+Once the _token_ is deleted, you can display an alert box with the message "Disconnected successfully".
 
-**Bonus:** tu peux aussi créer un formulaire de création de compte pour t'entraîner.
+**Bonus:** you can also create an account creation form for practice.
 
 ### Solution
 
-> **Attention** : essaie de faire l'exercice par toi-même avant de regarder la solution !
+> **Warning**: try to do the exercise yourself before looking at the solution!
 
 -
 -
@@ -852,18 +852,18 @@ const handleSubmit = (event) => {
 };
 ```
 
-## Bonus 1 - Récupération du payload du JWT
+## Bonus 1 - Retrieving the JWT payload
 
-Lorsqu'un utilisateur se connecte, on récupère le token : ce dernier contient un `payload` (des données stockées en JSON).
+When a user logs in, the token is retrieved: it contains a `payload` (data stored in JSON).
 
-Utilise la bibliothèque [jwt-decode](https://www.npmjs.com/package/jwt-decode) pour décoder et logger le `payload`, lors de la connexion d'un utilisateur.
+Use the [jwt-decode] library (https://www.npmjs.com/package/jwt-decode) to decode and log the `payload`, when a user logs in.
 
-## Bonus 2 - Création de compte
+## Bonus 2 - Account creation
 
-Ajoute le contenu nécessaire à la création d'un compte utilisateur.
+Adds the content needed to create a user account.
 
 ## Bonus 3 - HTTP Cookies
 
-Plutôt que d'utiliser le localStorage pour gérer les Json Web Token, il est plus sûr d'utiliser les HTTP Cookies.
+Rather than using localStorage to handle Json Web Tokens, it is safer to use HTTP Cookies.
 
-Change le code afin d'utiliser cette méthode là : [Using Cookies with JWT in Node.js](https://dev.to/franciscomendes10866/using-cookies-with-jwt-in-node-js-8fn)
+Change the code to use this method here: [Using Cookies with JWT in Node.js](https://dev.to/franciscomendes10866/using-cookies-with-jwt-in-node-js-8fn)
