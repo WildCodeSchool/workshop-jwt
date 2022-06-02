@@ -30,7 +30,7 @@ npm run dev
 
 ## 1 - Création d'un compte utilisateur
 
-Modifie la route en POST `/register` qui va permettre la création d'un compte utilisateur.
+Modifie la route en POST `/users/register` qui va permettre la création d'un compte utilisateur.
 
 La route doit récupérer du corps de la requête un json à la structure suivante :
 
@@ -62,7 +62,7 @@ Si tout c'est bien passé, renvoyer un code 201 avec un json ayant la structure 
 
 Teste le tout avec Postman :
 
-- POST http://localhost:5000/register
+- POST http://localhost:5000/users/register
 - Body / raw / JSON
 - Dans le corps de la requête un JSON, par exemple :
 
@@ -126,7 +126,7 @@ Regarde le lien suivant pour voir comment _hasher_ le mot de passe avec la bibli
 
 Installe le module [argon2](https://www.npmjs.com/package/argon2) dans ton projet.
 
-Ensuite modifie ta route `/register` pour crypter le mot de passe de façon synchrone, **avant** qu'il ne soit enregistré dans la base de données.
+Ensuite modifie ta route `/users/register` pour crypter le mot de passe de façon synchrone, **avant** qu'il ne soit enregistré dans la base de données.
 
 Vérifie que le mot de passe est bien encrypté dans la base de donnée.
 
@@ -189,7 +189,7 @@ Vérifie que le mot de passe est bien encrypté dans la base de donnée.
 
 ## 3 - Connexion au compte utilisateur
 
-Créer une route en POST `/login` qui va permettre la connexion d'un compte utilisateur.
+Créer une route en POST `/users/login` qui va permettre la connexion d'un compte utilisateur.
 
 La route doit récupérer du corps de la requête un json à la structure suivante :
 
@@ -226,7 +226,7 @@ Sinon renvoie une erreur 403 avec le message 'Invalid password'.
 
 Teste le tout avec Postman :
 
-- POST http://localhost:5000/login
+- POST http://localhost:5000/users/login
 - Body / raw / JSON
 - Dans le corps de la requête un JSON, par exemple :
 
@@ -320,7 +320,7 @@ Ensuite, tu vas utiliser le module [jsonwebtoken](https://www.npmjs.com/package/
 - Le _payload_ de la clé sera le json suivant : `json { id: id, name: name }`
 - la date d'expiration `expiresIn` sera de une heure.
 
-Génère la clé juste avant de renvoyer utilisateur dans la route `/login` et fait en sorte que la structure du JSON soit la suivante :
+Génère la clé juste avant de renvoyer utilisateur dans la route `/users/login` et fait en sorte que la structure du JSON soit la suivante :
 
 ```json
 {
@@ -633,7 +633,9 @@ export default Login;
 
 Maintenant que ton formulaire est prêt, tu vas contacter le serveur afin qu'il te réponde si l'utilisateur est bien connecté.
 
-Installe le module `axios` et modifie la fonction `handleSubmit` afin d'appeler la route `/login` de ton serveur, en utilisant la variable d'environnement pour l'url du serveur.
+Installe le module `axios` et modifie la fonction `handleSubmit` afin d'appeler la route `/users/login` de ton serveur, en utilisant la variable d'environnement pour l'url du serveur.
+
+> Attention, le module est à installer en frontend !
 
 Tu peux récupérer une variable d'environnement de la façon suivante :
 
@@ -679,7 +681,7 @@ const handleSubmit = (event) => {
   event.preventDefault();
   if (email && password) {
     axios
-      .post(`${import.meta.env.VITE_BACKEND_URL}/login/`, {
+      .post(`${import.meta.env.VITE_BACKEND_URL}/users/login`, {
         email,
         password,
       })
@@ -728,7 +730,7 @@ const handleSubmit = (event) => {
   event.preventDefault();
   if (email && password) {
     axios
-      .post(`${import.meta.env.VITE_BACKEND_URL}/login/`, {
+      .post(`${import.meta.env.VITE_BACKEND_URL}/users/login`, {
         email,
         password,
       })
