@@ -858,7 +858,7 @@ Use the [jwt-decode] library (https://www.npmjs.com/package/jwt-decode) to decod
 
 ## Bonus 2 - Account creation
 
-Adds the content needed to create a user account.
+Add the content needed to create a user account.
 
 ## Bonus 3 - HTTP Cookies
 
