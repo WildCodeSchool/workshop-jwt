@@ -12,7 +12,7 @@ npm run setup
 
 ### Database
 
-In order to manage user registration and login, create a new database named `jwtcourse` and import the script `backend/database.sql` to recreate the following `user` table:
+In order to manage user registration and login, read then import the SQL file `backend/database.sql` to recreate the following `user` table:
 
 ![Database](pictures/2-database.png)
 
@@ -38,11 +38,13 @@ The route must retrieve a json with the following structure from the request bod
 {
   "email": "their email",
   "password": "their password",
-  "role": "their role"
+  "role": "their role, can only be USER or ADMIN"
 }
 ```
 
 If the email or password are not filled in, return an error 400 'Please specify both email and password'.
+
+By default, the role is USER.
 
 If they are, query the database and insert the data into the `user` table.
 
@@ -70,7 +72,7 @@ Test it with Postman:
 {
   "email": "test@test.fr",
   "password": "tacos",
-  "role": "admin"
+  "role": "USER"
 }
 ```
 
@@ -420,12 +422,12 @@ If all went well, return a 200 code with a json with the following structure:
   {
     "id": 1,
     "email": "test@test.fr",
-    "role": "admin"
+    "role": "USER"
   },
   {
     "id": 2,
     "email": "tacos@test.fr",
-    "role": "user"
+    "role": "ADMIN"
   }
 ]
 ```
@@ -531,11 +533,9 @@ Of course, you'll have to replace the _token_ with the one you got when you logg
 ```js
 // src/router.js
 
-const {
-  authenticateWithJsonWebToken,
-} = require("./controllers/UserController");
+const { authorization } = require("./controllers/UserController");
 
-router.get("/users", authenticateWithJsonWebToken, UserController.browse);
+router.get("/users", authorization, UserController.browse);
 ```
 
 # Frontend

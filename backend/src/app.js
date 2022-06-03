@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const path = require("path");
 
 const cors = require("cors");
@@ -6,6 +7,8 @@ const cors = require("cors");
 // let's create express app
 
 const app = express();
+
+app.use(cookieParser());
 
 // use some application-level middlewares
 app.use(

@@ -1,59 +1,133 @@
 const models = require("../models");
-const UserManager = require('../models/UserManager');
+const argon2 = require("argon2");
+const jwt = require("jsonwebtoken");
 
 class UserController {
   static register = async (req, res) => {
-    const { email, password, name } = req.body;
+    const { email, password, role } = req.body;
 
-    // TODO check if email and/or password are empty or missing
+    if (!email || !password) {
+      res.status(400).send({ error: "Please specify both email and password" });
+      return;
+    }
 
-    // TODO hash password
+    try {
+      const hash = await argon2.hash(password);
 
-    UserManager
-      .insert({ email, password, name })
-      .then(([result]) => {
-        // TODO success response
-      })
-      .catch((err) => {
-        console.error(err);
-        // TODO send error response
+      models.user
+        .insert({ email, password: hash, role })
+        .then(([result]) => {
+          res.status(201).send({ id: result.insertId, email, role });
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send({
+            error: err.message,
+          });
+        });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({
+        error: err.message,
       });
+    }
   };
 
   static login = (req, res) => {
     const { email, password } = req.body;
 
-    // TODO check if email and/or password are empty or missing
+    if (!email || !password) {
+      res.status(400).send({ error: "Please specify both email and password" });
+    }
 
     models.user
-      // TODO complete the `findByMail` method in UserManager.js
       .findByMail(email)
       .then(async ([rows]) => {
         if (rows[0] == null) {
-          // TODO invalid email
+          res.status(401).send({
+            error: "Invalid email",
+          });
         } else {
-          // TODO check password
-          // TODO generate JWT
-          // TODO send response
+          const { id, email, password: hashedPassword, role } = rows[0];
+
+          if (await argon2.verify(hashedPassword, password)) {
+            const token = jwt.sign(
+              { id: id, role: role },
+              process.env.JWT_AUTH_SECRET,
+              {
+                expiresIn: "1h",
+              }
+            );
+
+            res
+              .cookie("access_token", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+              })
+              .status(200)
+              .send({
+                id,
+                email,
+                role,
+              });
+          } else {
+            res.status(401).send({
+              error: "Invalid password",
+            });
+          }
         }
       })
       .catch((err) => {
         console.error(err);
-        // TODO send error response
+        res.status(500).send({
+          error: err.message,
+        });
       });
   };
 
-  // TODO add authenticateWithJsonWebToken method here!
+  // TODO add `authorization` middleware here!
+  static authorization = (req, res, next) => {
+    const token = req.cookies.access_token;
+    if (!token) {
+      return res.sendStatus(401);
+    }
+    try {
+      const data = jwt.verify(token, process.env.JWT_AUTH_SECRET);
+      req.userId = data.id;
+      req.userRole = data.role;
+      return next();
+    } catch {
+      return res.sendStatus(401);
+    }
+  };
+
+  // TODO add `isAdmin` middleware here!
+  static isAdmin = (req, res, next) => {
+    if (req.userRole === "ADMIN") {
+      return next();
+    }
+    return res.sendStatus(403);
+  };
 
   static browse = (req, res) => {
     models.user
       .findAll()
       .then(([rows]) => {
-        // TODO send users without passwords
+        res.send(
+          rows.map((user) => {
+            return {
+              id: user.id,
+              email: user.email,
+              role: user.role,
+            };
+          })
+        );
       })
       .catch((err) => {
         console.error(err);
-        // TODO send error response
+        res.status(500).send({
+          error: err.message,
+        });
       });
   };
 
