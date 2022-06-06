@@ -614,8 +614,6 @@ Then, you'll need to modify the `/user` route in `src/router.js`, so that it loa
 
 Finally, test the route with Postman (but only after you logged in, since you need the cookie).
 
-![Login with token - Postman](pictures/6-bearer-postman.png)
-
 ### Solution
 
 > **Warning**: try to do the exercise by yourself before looking at the solution!
