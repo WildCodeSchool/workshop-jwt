@@ -335,9 +335,9 @@ Generate the key just before returning user in the `/users/login` route and make
 }
 ```
 
-> Be careful, the module has to be installed in the backend!
+> Be careful, the module has to be installed in the backend folder
 
-> Remember to import the module at the top of your file!
+> Remember to import the module at the top of your file
 
 ### Solution
 
@@ -824,7 +824,7 @@ Now that you have your form ready, you will contact the server and have it respo
 
 Install the `axios` module and modify the `handleSubmit` function to call the `/users/login` route on your server, using the environment variable for the server url.
 
-> Be careful, the module has to be installed in the frontend!
+> Be careful, the module has to be installed in the frontend folder
 
 You can get an environment variable as follows:
 
