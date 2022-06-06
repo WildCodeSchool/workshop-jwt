@@ -1,7 +1,20 @@
+import axios from "axios";
+
 const Logout = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
-    // TODO your code here
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}/users/logout`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        alert("Successfully logged out");
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          alert("You're not authenticated");
+        }
+      });
   };
 
   return (

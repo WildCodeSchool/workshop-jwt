@@ -85,6 +85,11 @@ class UserController {
       });
   };
 
+  static logout = (req, res) => {
+    // TODO remove JWT token from HTTP cookies
+    return res.clearCookie("access_token").sendStatus(200);
+  };
+
   // TODO add `authorization` middleware here!
   static authorization = (req, res, next) => {
     const token = req.cookies.access_token;
@@ -103,7 +108,7 @@ class UserController {
 
   // TODO add `isAdmin` middleware here!
   static isAdmin = (req, res, next) => {
-    if (req.userRole === "ADMIN") {
+    if (req.userRole === "ROLE_ADMIN") {
       return next();
     }
     return res.sendStatus(403);
