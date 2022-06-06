@@ -832,7 +832,7 @@ You can get an environment variable as follows:
 import.meta.env.VITE_BACKEND_URL;
 ```
 
-Think that the _email_ and _password_ will be sent in the body of the request, you can see an example here: [https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index](https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index) (in the _POST request_ section).
+Think that the _email_ and _password_ will be sent in the body of the request, you can see an example here: [https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index](https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index#//dash_ref_General/Entry/POST%20request/0) (in the _POST request_ section).
 
 If an error is catched, it displays an alert box with the corresponding message. This is the `catch` method which you can see used in the shared resource above.
 
