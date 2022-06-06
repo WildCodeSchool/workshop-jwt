@@ -601,7 +601,7 @@ For this part, add the _middleware_ below to the `UserController`:
   };
 ```
 
-In order to read cookies with the `req.cookies` command, Express needs this _middleware_ : [cookie-parser] module (https://www.npmjs.com/package/cookie-parser).
+In order to read cookies with the `req.cookies` command, Express needs the [cookie-parser module](https://www.npmjs.com/package/cookie-parser).
 
 Once the module is installed, modify the `src/app.js` file to import the module and load the _middleware_ with Express:
 
