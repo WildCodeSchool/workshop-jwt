@@ -206,7 +206,7 @@ If neither the email nor the password are filled in, return a 400 error 'Please 
 
 If they are both specified, make a request to the database and check that the email exists (**test the email only, not the password!)**.
 
-You'll have to modify the `findByMail` method from the `UserManager`;
+You'll have to modify the `findByMail` method from `UserManager`.
 
 If an error occurs during the execution of the SQL query, return an error 500 with the corresponding error message.
 
