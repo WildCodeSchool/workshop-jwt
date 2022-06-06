@@ -70,7 +70,7 @@ Test it with Postman:
 
 ```json
 {
-  "email": "tescleart@test.fr",
+  "email": "clear@test.fr",
   "password": "tacostacos",
   "role": "ROLE_USER"
 }
@@ -816,7 +816,7 @@ function Login() {
       <input type='submit' value='Login' />
     </form>
   );
-};
+}
 
 export default Login;
 ```
