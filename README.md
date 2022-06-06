@@ -557,7 +557,6 @@ If all went well, return a 200 code with a json with the following structure:
     models.user
       .findAll()
       .then(([rows]) => {
-        res.status(200).send(rows);
         res.send(
           rows.map((user) => {
             return {
