@@ -698,6 +698,8 @@ router.get("/users", authorization, isAdmin, UserController.browse);
 
 You will have to create a `/logout` route, which removes the `access_token` cookie from the server.
 
+The user will need to be connected to call this route, so you will need to add the `authorization` middleware.
+
 You will have to use the [clearCookie](https://expressjs.com/en/api.html#res.clearCookie) method from Express.
 
 ### Solution
@@ -723,6 +725,10 @@ You will have to use the [clearCookie](https://expressjs.com/en/api.html#res.cle
   static logout = (req, res) => {
     return res.clearCookie("access_token").sendStatus(200);
   };
+
+// src/router.js
+
+router.get("/users/logout", authorization, UserController.logout);
 ```
 
 # Frontend
@@ -768,7 +774,7 @@ Creates a `handleSubmit` function linked to the form submission:
 
 import { useState } from "react";
 
-const Login = () => {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
