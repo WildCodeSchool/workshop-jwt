@@ -44,9 +44,9 @@ The route must retrieve a json with the following structure from the request bod
 
 If the email or password are not filled in, return an error 400 'Please specify both email and password'.
 
-By default, the role is USER.
+By default, the role is `ROLE_USER`.
 
-If they are, query the database and insert the data into the `user` table.
+Query the database and insert the data into the `user` table.
 
 If an error occurs while executing the SQL query, return an error 500 with the corresponding error message.
 
@@ -60,7 +60,7 @@ If all went well, return a 201 code with a json with the following structure:
 }
 ```
 
-> Do not return the password
+> Do not send back the password
 
 Test it with Postman:
 
@@ -70,8 +70,8 @@ Test it with Postman:
 
 ```json
 {
-  "email": "test@test.fr",
-  "password": "tacos",
+  "email": "tescleart@test.fr",
+  "password": "tacostacos",
   "role": "ROLE_USER"
 }
 ```
@@ -132,9 +132,9 @@ Then modify your `/users/register` route to hash the password, **before** it is 
 
 Check that the password is hashed in the database.
 
-> Be careful, the module must be installed in the backend!
+> Be careful, the module must be installed in the backend folder
 
-> Remember to import the module at the top of your file!
+> Remember to import the module at the top of your file
 
 ### Solution
 
@@ -204,7 +204,9 @@ The route must retrieve a json with the following structure from the request bod
 
 If neither the email nor the password are filled in, return a 400 error 'Please specify both email and password'.
 
-If they are both specified, make a request to the database and check that the email exists (**test the email only, not the password!)**).
+If they are both specified, make a request to the database and check that the email exists (**test the email only, not the password!)**.
+
+You'll have to modify the `findByMail` method from the `UserManager`;
 
 If an error occurs during the execution of the SQL query, return an error 500 with the corresponding error message.
 
@@ -234,8 +236,8 @@ Test this with Postman:
 
 ```json
 {
-  "email": "test@test.fr",
-  "password": "tacos"
+  "email": "hashed@test.fr",
+  "password": "tacostacos"
 }
 ```
 
@@ -285,9 +287,9 @@ Test this with Postman:
             error: "Invalid email",
           });
         } else {
-          const { id, email, password: hashedPassword, role } = rows[0];
+          const { id, email, password: hash, role } = rows[0];
 
-          if (await argon2.verify(hashedPassword, password)) {
+          if (await argon2.verify(hash, password)) {
             res.status(200).send({
               id,
               email,
@@ -374,9 +376,9 @@ Generate the key just before returning user in the `/users/login` route and make
             error: "Invalid email",
           });
         } else {
-          const { id, email, password: hashedPassword, role } = rows[0];
+          const { id, email, password: hash, role } = rows[0];
 
-          if (await argon2.verify(hashedPassword, password)) {
+          if (await argon2.verify(hash, password)) {
             const token = jwt.sign(
               { id: id, role: role },
               process.env.JWT_AUTH_SECRET,
@@ -409,9 +411,9 @@ Generate the key just before returning user in the `/users/login` route and make
 
 ## 5 - Send JWT via cookies
 
-Pour plus de sécurité, nous n'allons pas renvoyer le JWT dans le corps de la requête, mais par cookies.
+To be safe, we won't return the JWT in the request body, but inside HTTP cookies.
 
-Dans `src/app.js`, modifie la configuration des `cors` afin de prendre en comte l'envoie des cookies par l'API, en ajoutant la configuration `credentials: true` :
+In `src/app.js`, modify the `cors` configuration to take into account the sending of cookies by the API, by adding the `credentials: true` configuration:
 
 ```js
 app.use(
@@ -466,9 +468,9 @@ Once done, you can remove the token from the json (it is unnecessary, as it is s
             error: "Invalid email",
           });
         } else {
-          const { id, email, password: hashedPassword, role } = rows[0];
+          const { id, email, password: hash, role } = rows[0];
 
-          if (await argon2.verify(hashedPassword, password)) {
+          if (await argon2.verify(hash, password)) {
             const token = jwt.sign(
               { id: id, role: role },
               process.env.JWT_AUTH_SECRET,
@@ -516,13 +518,13 @@ If all went well, return a 200 code with a json with the following structure:
 [
   {
     "id": 1,
-    "email": "test@test.fr",
+    "email": "clear@test.fr",
     "role": "ROLE_USER"
   },
   {
     "id": 2,
-    "email": "tacos@test.fr",
-    "role": "ROLE_ADMIN"
+    "email": "hashed@test.fr",
+    "role": "ROLE_USER"
   }
 ]
 ```
@@ -642,9 +644,9 @@ router.get("/users", authorization, UserController.browse);
 
 ## 8 - Admin route only
 
-The `/users` route check if the user is logged in with the JWT. But sometimes, you also need to check the role of the user.
+The `/users` route checks if the user is logged in with the JWT. But sometimes, you also need to check the role of the user.
 
-Is you read the code of the `authorization` middleware, you'll se that when the JWT is verified, the _paypload_ is also decoded and stored in the request :
+Read the code of the `authorization` middleware code: when the JWT is verified, the _paypload_ is also decoded and stored in the request:
 
 ```js
 const data = jwt.verify(token, process.env.JWT_AUTH_SECRET);
@@ -652,11 +654,11 @@ req.userId = data.id;
 req.userRole = data.role;
 ```
 
-When something is stored in the request, it becames available in the next middlewares.
+The `id` and `role` properties both became available in the next middleware call.
 
-Create a new middleware `isAdmin`, which go to the next middleware if the user has the role `ROLE_ADMIN`, and sends a `403` response status if the user is not an admin.
+Create a new middleware `isAdmin`, which goes to the next middleware if the user has the role `ROLE_ADMIN`, and sends a `403` response status if the user is not an admin.
 
-Then, add this middleware to the `/users` route.
+Finally, add this middleware to the `/users` route.
 
 ### Solution
 
@@ -694,7 +696,7 @@ router.get("/users", authorization, isAdmin, UserController.browse);
 
 ## 9 - Logout
 
-Finally, you will have to create a `/logout` route, which removes the `access_token` cookie from the server.
+You will have to create a `/logout` route, which removes the `access_token` cookie from the server.
 
 You will have to use the [clearCookie](https://expressjs.com/en/api.html#res.clearCookie) method from Express.
 
@@ -721,23 +723,6 @@ You will have to use the [clearCookie](https://expressjs.com/en/api.html#res.cle
   static logout = (req, res) => {
     return res.clearCookie("access_token").sendStatus(200);
   };
-```
-
-## 10 - Access-Control-Allow-Credentials
-
-In order to receive HTTP cookies from a real frontend request (and not just a Postman one), you will have to add a configuration to the CORS of your backend.
-
-In order to to so, modify the `src/app.js` file add add `credentials: true` to the cors configurations:
-
-```js
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
-    optionsSuccessStatus: 200,
-    // TODO add credentials here
-    credentials: true,
-  })
-);
 ```
 
 # Frontend
@@ -921,13 +906,13 @@ const handleSubmit = (event) => {
 
 ## 3 - Check the JSON Web Token
 
-When the user is logged in, you receive the JWT access token in the cookies. You can check this by opening the browser developper toolbar, select the `Network tab`.
+When the user is logged in, you receive the JWT access token in the cookies. You can check this by opening the browser developer toolbar, select the `Network tab`.
 
 Log the user again, and click on the `login` API call.
 
 In the new frame, select the `Headers` tab and if you scroll to the `Set-Cookie` property, you should see the `access_token`.
 
-This cookie will "follow" the user during their navigation, and it will be sent to future call of the API.
+This cookie will "follow" the user during their navigation, and it will be sent to all future calls of the API.
 
 ![HTTP Cookies in browser](pictures/6-set-cookies.png)
 
@@ -994,9 +979,9 @@ useEffect(() => {
 
 Finish now by going to the Logout page.
 
-Call the correspoding API route (still with the `withCredentials` property), and once the _token_ is deleted, you can display an alert box with the message "Disconnected successfully".
+Call the corresponding API route (still with the `withCredentials` property), and once the _token_ is deleted, you can display an alert box with the message "Disconnected successfully".
 
-You can go a step further and check if a `401` code is sent back (if the user tries to logout without beeing connected).
+You can go a step further and check if a `401` code is sent back (if the user tries to logout without being connected).
 
 ### Solution
 
