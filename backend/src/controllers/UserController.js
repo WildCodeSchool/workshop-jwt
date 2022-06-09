@@ -1,74 +1,42 @@
 const models = require("../models");
-const { jwtSign } = require("../services/jwt");
-const { passwordHash, passwordVerify } = require("../services/password");
 
 class UserController {
   static register = async (req, res) => {
-    const { email, password, role } = req.body;
+    // TODO check for email and password
 
-    if (!email || !password) {
-      res.status(400).send({ error: "Please specify both email and password" });
-      return;
-    }
+    // TODO hash password
 
-    try {
-      const hash = await passwordHash(password);
-
-      models.user
-        .insert({ email, password: hash, role })
-        .then(([result]) => {
-          res.status(201).send({ id: result.insertId, email, role });
-        })
-        .catch((err) => {
-          console.error(err);
-          res.status(500).send({
-            error: err.message,
-          });
+    models.user
+      .insert(req.body)
+      .then(([result]) => {
+        // TODO send the response
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send({
+          error: err.message,
         });
-    } catch (err) {
-      console.error(err);
-      res.status(500).send({
-        error: err.message,
       });
-    }
   };
 
   static login = (req, res) => {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-      res.status(400).send({ error: "Please specify both email and password" });
-    }
+    // TODO check for email and password
 
     models.user
       .findByMail(email)
       .then(async ([rows]) => {
         if (rows[0] == null) {
-          res.status(401).send({
-            error: "Invalid email",
-          });
+          // TODO invalid email
         } else {
           const { id, email, password: hash, role } = rows[0];
 
-          if (await passwordVerify(hash, password)) {
-            const token = jwtSign({ id: id, role: role }, { expiresIn: "1h" });
+          // TODO invalid password
 
-            res
-              .cookie("access_token", token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-              })
-              .status(200)
-              .send({
-                id,
-                email,
-                role,
-              });
-          } else {
-            res.status(401).send({
-              error: "Invalid password",
-            });
-          }
+          // TODO sign JWT with 1h expiration
+
+          // TODO send the response and the HTTP cookie
         }
       })
       .catch((err) => {
@@ -83,15 +51,7 @@ class UserController {
     models.user
       .findAll()
       .then(([rows]) => {
-        res.send(
-          rows.map((user) => {
-            return {
-              id: user.id,
-              email: user.email,
-              role: user.role,
-            };
-          })
-        );
+        // TODO send the list of users (without passwords)
       })
       .catch((err) => {
         console.error(err);
@@ -102,8 +62,12 @@ class UserController {
   };
 
   static logout = (req, res) => {
-    return res.clearCookie("access_token").sendStatus(200);
+    // TODO remove JWT token from HTTP cookies
   };
+
+  // TODO add `authorization` middleware here!
+
+  // TODO add `isAdmin` middleware here!
 
   static edit = (req, res) => {
     const user = req.body;

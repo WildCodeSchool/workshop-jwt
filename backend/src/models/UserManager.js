@@ -3,12 +3,8 @@ const AbstractManager = require("./AbstractManager");
 class UserManager extends AbstractManager {
   static table = "user";
 
-  findByMail(email) {
-    return this.connection.query(
-      `select * from ${UserManager.table} where email = ?`,
-      [email]
-    );
-  }
+  // TODO complete the `findByMail` method
+  findByMail(email) {}
 
   insert(user) {
     return this.connection.query(

@@ -1,17 +1,10 @@
 import { useState, useEffect } from "react";
-import useAxios from "../hooks/useAxios";
 
 function Users() {
   const [users, setUsers] = useState([]);
-  const axios = useAxios();
 
   useEffect(() => {
-    axios
-      .get("users")
-      .then((res) => res.data)
-      .then((data) => {
-        setUsers(data);
-      });
+    // TODO
   }, []);
 
   return (
