@@ -7,8 +7,7 @@ class UserController {
     const { email, password, role } = req.body;
 
     if (!email || !password) {
-      res.status(400).send({ error: "Please specify both email and password" });
-      return;
+      return res.status(400).send({ error: "Please specify both email and password" });
     }
 
     try {
@@ -37,7 +36,7 @@ class UserController {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      res.status(400).send({ error: "Please specify both email and password" });
+      return res.status(400).send({ error: "Please specify both email and password" });
     }
 
     models.user
