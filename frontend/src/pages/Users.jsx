@@ -3,15 +3,12 @@ import useAxios from "../hooks/useAxios";
 
 function Users() {
   const [users, setUsers] = useState([]);
-  const axios = useAxios();
+  const { getUsers } = useAxios();
 
   useEffect(() => {
-    axios
-      .get("users")
-      .then((res) => res.data)
-      .then((data) => {
-        setUsers(data);
-      });
+    getUsers().then((data) => {
+      setUsers(data);
+    });
   }, []);
 
   return (

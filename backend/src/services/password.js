@@ -11,8 +11,8 @@ async function passwordHash(password) {
   return argon2.hash(password, hashingOptions);
 }
 
-async function passwordVerify(hash, password) {
-  return argon2.verify(hash, password, hashingOptions);
+async function passwordVerify(hashedPassword, plainPassword) {
+  return argon2.verify(hashedPassword, plainPassword, hashingOptions);
 }
 
 module.exports = { passwordHash, passwordVerify };

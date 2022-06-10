@@ -1,11 +1,11 @@
 import useAxios from "../hooks/useAxios";
 
 function Logout() {
-  const axios = useAxios();
+  const { logout } = useAxios();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.get("users/logout").then(() => {
+    logout().then(() => {
       alert("Successfully logged out");
     });
   };

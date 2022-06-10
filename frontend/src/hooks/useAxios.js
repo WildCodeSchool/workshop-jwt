@@ -26,7 +26,7 @@ function useAxios() {
     },
     function (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response.status === 401) {
+        if (error.response.status === 401 && !error.message) {
           alert("You're not authenticated");
           navigate("/login");
         }
@@ -39,7 +39,19 @@ function useAxios() {
     }
   );
 
-  return Api;
+  function login(email, password) {
+    return Api.post("users/login", { email, password }).then((res) => res.data);
+  }
+
+  function logout() {
+    return Api.get("users/logout");
+  }
+
+  function getUsers() {
+    return Api.get("users").then((res) => res.data);
+  }
+
+  return { login, logout, getUsers };
 }
 
 export default useAxios;

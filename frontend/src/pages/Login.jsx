@@ -4,15 +4,12 @@ import useAxios from "../hooks/useAxios";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const axios = useAxios();
+  const { login } = useAxios();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (email && password) {
-      // don't forget to import the axios module
-      axios
-        .post("users/login", { email, password })
-        .then((res) => res.data)
+      login(email, password)
         .then((data) => {
           console.log(data);
           alert("Successfully logged in");
